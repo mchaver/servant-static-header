@@ -1,0 +1,7 @@
+resolver: lts-7.12
+packages:
+- servant-client-static-header/
+- servant-server-static-header/
+- servant-static-header/
+extra-deps: []
+flags: {}
