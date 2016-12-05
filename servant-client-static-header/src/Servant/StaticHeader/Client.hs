@@ -7,8 +7,12 @@
 {-# LANGUAGE TypeFamilies          #-}
 {-# LANGUAGE TypeOperators         #-}
 
-module Servant.StaticHeader.Client where
+module Servant.StaticHeader.Client (
+   module Servant.StaticHeader
+ , module Servant.StaticHeader.Client
+) where
 
+import Control.Concurrent (forkIO)
 import Data.Proxy
 import Data.String (fromString)
 import Data.Text (Text)
@@ -20,8 +24,8 @@ import qualified Servant.Common.Req as Req
 import Servant.StaticHeader
 
 instance (KnownSymbol fieldName, KnownSymbol fieldValue, HasClient api) => HasClient (StaticHeader fieldName fieldValue :> api) where
-  type Client (StaticHeader fieldName fieldValue :> api) = Text -> Client api
-  clientWithRoute Proxy req _val = 
+  type Client (StaticHeader fieldName fieldValue :> api) = Client api
+  clientWithRoute Proxy req = 
     clientWithRoute (Proxy :: Proxy api) (Req.addHeader fieldNameStr fieldValueStr req)
     where
        fieldNameStr = fromString $ symbolVal (Proxy :: Proxy fieldName)
